@@ -12,8 +12,17 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Dotnet_Base_Backend.API\Dotnet_Base_Backend.API.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Common\Dotnet_Base_Backend.Common.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.DTO\Dotnet_Base_Backend.DTO.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Models\Dotnet_Base_Backend.Models.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Services\Dotnet_Base_Backend.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

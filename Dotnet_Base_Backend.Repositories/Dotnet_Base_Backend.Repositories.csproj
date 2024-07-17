@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Common\Dotnet_Base_Backend.Common.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Models\Dotnet_Base_Backend.Models.csproj" />
   </ItemGroup>
 
 </Project>

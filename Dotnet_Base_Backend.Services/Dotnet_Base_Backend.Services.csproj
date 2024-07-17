@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.DTO\Dotnet_Base_Backend.DTO.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Models\Dotnet_Base_Backend.Models.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Repositories\Dotnet_Base_Backend.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

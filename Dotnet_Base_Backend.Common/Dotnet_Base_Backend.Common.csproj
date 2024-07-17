@@ -15,9 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Errors\ErrorMessages.es.resx">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Errors\ErrorMessages.fr.resx">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Update="Errors\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

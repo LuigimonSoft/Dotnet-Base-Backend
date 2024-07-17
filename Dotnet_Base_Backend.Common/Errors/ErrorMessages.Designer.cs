@@ -59,5 +59,50 @@ namespace Dotnet_Base_Backend.Common.Errors {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Message is not null.
+        /// </summary>
+        internal static string _1001 {
+            get {
+                return ResourceManager.GetString("1001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Message is not empty.
+        /// </summary>
+        internal static string _1002 {
+            get {
+                return ResourceManager.GetString("1002", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Message exceeds max length of 100 characters.
+        /// </summary>
+        internal static string _1003 {
+            get {
+                return ResourceManager.GetString("1003", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Database error.
+        /// </summary>
+        internal static string _4001 {
+            get {
+                return ResourceManager.GetString("4001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Internal server error.
+        /// </summary>
+        internal static string _5001 {
+            get {
+                return ResourceManager.GetString("5001", resourceCulture);
+            }
+        }
     }
 }

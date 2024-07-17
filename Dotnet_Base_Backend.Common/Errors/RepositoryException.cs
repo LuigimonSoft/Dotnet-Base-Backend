@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Dotnet_Base_Backend.Common.Errors
     public class RepositoryException: Exception
     {
         public ErrorCode ErrorCode { get; }
-        private static readonly ResourceManager _resourceManager = new ResourceManager("Dotnet_Base_Backend.Commons.Errors.ErrorMessages", typeof(ErrorMessages).Assembly);
+        private static readonly ResourceManager _resourceManager = ErrorMessages.ResourceManager; //new ResourceManager("Dotnet_Base_Backend.Commons.Errors.ErrorMessages", typeof(ErrorMessages).Assembly);
 
         public RepositoryException(ErrorCode errorCode) : base(GetErrorMessage(errorCode))
         {

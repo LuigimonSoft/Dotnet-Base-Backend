@@ -7,7 +7,7 @@ namespace Dotnet_Base_Backend.API.Extensions
 {
     public static class ValidationFailureExtension
     {
-        private static readonly ResourceManager _resourceManager = new ResourceManager("Dotnet_Base_Backend.Commons.Errors.ErrorMessages", typeof(Error).Assembly);
+        private static readonly ResourceManager _resourceManager = new ResourceManager("Dotnet_Base_Backend.Common.Errors.ErrorMessages", typeof(ErrorCode).Assembly);
         public static HttpStatusCode HttpStatusCode(this FluentValidation.Results.ValidationFailure obj)
         {
             return (HttpStatusCode)(new ErrorsStatusCodes()[((ErrorCode)int.Parse(obj.ErrorCode))]);

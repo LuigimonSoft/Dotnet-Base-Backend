@@ -1,4 +1,8 @@
 using Dotnet_Base_Backend.API.Middleware;
+using Dotnet_Base_Backend.Repositories;
+using Dotnet_Base_Backend.Repositories.Interfaces;
+using Dotnet_Base_Backend.Services.Interfaces;
+using Dotnet_Base_Backend.Services;
 
 namespace Dotnet_Base_Backend.API
 {
@@ -15,8 +19,13 @@ namespace Dotnet_Base_Backend.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
+            builder.Services.AddSingleton<IBaseRepository, BaseRepository>();
+            builder.Services.AddTransient<IBaseService, BaseService>();
+
             var app = builder.Build();
 
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -24,12 +33,10 @@ namespace Dotnet_Base_Backend.API
                 app.UseSwaggerUI();
             }
 
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-
             app.UseHttpsRedirection();
-
+            app.UseRouting();
+            
             app.UseAuthorization();
-
 
             app.MapControllers();
 

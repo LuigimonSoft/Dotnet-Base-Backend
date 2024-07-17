@@ -12,7 +12,7 @@ namespace Dotnet_Base_Backend.Common.Errors
     public class ServicesException : Exception
     {
         public ErrorCode ErrorCode { get; }
-        private static readonly ResourceManager _resourceManager = new ResourceManager("Dotnet_Base_Backend.Commons.Errors.ErrorMessages", typeof(ErrorMessages).Assembly);
+        private static readonly ResourceManager _resourceManager = ErrorMessages.ResourceManager;
 
         public ServicesException(ErrorCode errorCode) : base(GetErrorMessage(errorCode))
         {

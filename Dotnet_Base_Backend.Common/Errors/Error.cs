@@ -16,6 +16,7 @@ namespace Dotnet_Base_Backend.Common.Errors
         public string Instance { set; get; }
         public Dictionary<string, string> AdditionalProperties { set; get; }
 
+        public Error() { }
         public Error(ErrorCode errorcode, string Message ,TypeErrors typeError,  Exception error, string Method = "", string url="")
         {             
             Status = 0;

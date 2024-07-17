@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Filters\" />
-    <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Dotnet_Base_Backend.Common\Dotnet_Base_Backend.Common.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.DTO\Dotnet_Base_Backend.DTO.csproj" />
+    <ProjectReference Include="..\Dotnet_Base_Backend.Services\Dotnet_Base_Backend.Services.csproj" />
   </ItemGroup>
 
 </Project>

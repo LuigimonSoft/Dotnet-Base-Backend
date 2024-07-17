@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnet_Base_Backend.Reposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnet_Base_Backend.API.Test", "Dotnet_Base_Backend.API.Test\Dotnet_Base_Backend.API.Test.csproj", "{682CA28D-A69D-4E06-9E24-01F56FAEF180}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dotnet_Base_Backend.Integration.Test", "Dotnet_Base_Backend.Integration.Test\Dotnet_Base_Backend.Integration.Test.csproj", "{D3E4B3BE-39A6-4845-AA13-44C301417350}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{682CA28D-A69D-4E06-9E24-01F56FAEF180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{682CA28D-A69D-4E06-9E24-01F56FAEF180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{682CA28D-A69D-4E06-9E24-01F56FAEF180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3E4B3BE-39A6-4845-AA13-44C301417350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3E4B3BE-39A6-4845-AA13-44C301417350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3E4B3BE-39A6-4845-AA13-44C301417350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3E4B3BE-39A6-4845-AA13-44C301417350}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,30 @@
+name: Checking all test
+
+on:
+  pull_request:
+    branches: [ "master"]
+
+jobs: 
+  build:
+    strategy:
+      matrix:
+        configuration: [ "Debug", "Release" ]
+
+    runs-on: ubuntu-latest
+
+    env:
+      Solution_Name: Dotnet_Base_Backend.sln
+      Test_Project: Dotnet_Base_Backend.API.Tests.csproj
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET 
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Execute unit test
+        run: dotnet test

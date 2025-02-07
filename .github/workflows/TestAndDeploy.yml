@@ -53,7 +53,7 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: SonarCube - SonaCloud -> Begin
-        run: dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io" /d:sonar.organization="luigimonsoft"
+        run: dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io" /o:"luigimonsoft"
         
       - name: Build and Test
         run: dotnet build --no-incremental

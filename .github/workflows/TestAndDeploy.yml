@@ -28,3 +28,15 @@ jobs:
 
       - name: Execute unit test
         run: dotnet test
+
+      - name: install dotnet-coverage
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: SonarCube - SonaCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+        run: dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+             dotnet build --no-incremental
+             dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+             dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

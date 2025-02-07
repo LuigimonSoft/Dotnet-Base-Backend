@@ -15,6 +15,8 @@ jobs:
     env:
       Solution_Name: Dotnet_Base_Backend.sln
       Test_Project: Dotnet_Base_Backend.API.Tests.csproj
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,11 +34,14 @@ jobs:
       - name: install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
 
-      - name: SonarCube - SonaCloud
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      - name: SonarCube - SonaCloud -> Begin
         run: dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-             dotnet build --no-incremental
-             dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
-             dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        
+      - name: Build and Test
+        run: dotnet build --no-incremental
+
+      - name: Collect coverage
+        run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+             
+      - name: SonarCube - SonaCloud -> End
+        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

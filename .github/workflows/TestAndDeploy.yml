@@ -35,6 +35,9 @@ jobs:
       - name: install dotnet-coverage
         run: dotnet tool install --global dotnet-coverage
 
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
       - name: Cache SonarQube Cloud packages
         uses: actions/cache@v4
         with:
@@ -53,13 +56,13 @@ jobs:
       - name: Install SonarQube Cloud scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: SonarCube - SonaCloud -> Begin
+      - name: SonarCloud - Begin Analysis
         run: |
           dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" \
             /o:"${{ env.SONAR_ORG }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="coverage.xml"
+            /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml"
       
       - name: Restore dependencies
         run: dotnet restore
@@ -67,8 +70,13 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration ${{ matrix.configuration }}
 
-      - name: Collect coverage
+      - name: Run Tests with Coverage
         run: dotnet-coverage collect "dotnet test --no-build --configuration ${{ matrix.configuration }}" -f cobertura -o coverage.xml
+
+      - name: Convert Coverage to OpenCover format
+        run: |
+          reportgenerator -reports:coverage.xml -targetdir:./ -reporttypes:OpenCover
+          mv coverage.opencover.xml coverage.opencover.xml
              
       - name: SonarCube - SonaCloud -> End
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

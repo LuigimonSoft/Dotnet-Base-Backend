@@ -17,6 +17,7 @@ jobs:
       Test_Project: Dotnet_Base_Backend.API.Tests.csproj
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      SONAR_ORG: "luigimonsoft"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,13 +54,21 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: SonarCube - SonaCloud -> Begin
-        run: dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.host.url="https://sonarcloud.io" /o:"luigimonsoft"
+        run: |
+          dotnet sonarscanner begin /k:"${{ secrets.SONAR_PROJECT_KEY }}" \
+            /o:"${{ env.SONAR_ORG }}" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.opencover.reportsPaths="coverage.xml"
+      
+      - name: Restore dependencies
+        run: dotnet restore
         
-      - name: Build and Test
-        run: dotnet build --no-incremental
+      - name: Build
+        run: dotnet build --no-restore --configuration ${{ matrix.configuration }}
 
       - name: Collect coverage
-        run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+        run: dotnet-coverage collect "dotnet test --no-build --configuration ${{ matrix.configuration }}" -f cobertura -o coverage.xml
              
       - name: SonarCube - SonaCloud -> End
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

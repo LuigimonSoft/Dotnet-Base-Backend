@@ -62,7 +62,7 @@ jobs:
             /o:"${{ env.SONAR_ORG }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml"
+            /d:sonar.cs.sqale.reportsPaths="coverage/SonarQube.xml"
       
       - name: Restore dependencies
         run: dotnet restore
@@ -73,10 +73,8 @@ jobs:
       - name: Run Tests with Coverage
         run: dotnet-coverage collect "dotnet test --no-build --configuration ${{ matrix.configuration }}" -f cobertura -o coverage.xml
 
-      - name: Convert Coverage to OpenCover format
-        run: |
-          reportgenerator -reports:coverage.xml -targetdir:./ -reporttypes:OpenCover
-          mv coverage.opencover.xml coverage.opencover.xml
+      - name: Convert Coverage to SonarQube format (FREE)
+        run: reportgenerator -reports:coverage.xml -targetdir:coverage -reporttypes:SonarQube
              
       - name: SonarCube - SonaCloud -> End
         run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

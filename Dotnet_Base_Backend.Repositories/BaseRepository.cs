@@ -1,11 +1,7 @@
 ﻿using Dotnet_Base_Backend.Common.Errors;
 using Dotnet_Base_Backend.Models;
 using Dotnet_Base_Backend.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dotnet_Base_Backend.Repositories
 {

@@ -64,12 +64,11 @@ public class DotnetBaseBackendTest
     }
 
     [TestMethod]
-    [DataRow("",ErrorCode.EMPTY)]
-    [DataRow("0123456789012345678901234567890", ErrorCode.MAX_LENGTH)]
-    public async Task SetMessage_ReturnBadRequest(string message, ErrorCode ErrorCodeExpected)
+    [DataRow(1, "",ErrorCode.EMPTY)]
+    [DataRow(1, "0123456789012345678901234567890", ErrorCode.MAX_LENGTH)]
+    public async Task AddMessage_ReturnBadRequest(int idExpected, string message, ErrorCode ErrorCodeExpected)
     {
         // Arrange
-        int idExpected = 1;
         var messageDTO = new MessageDto(idExpected, message);
         var content = new StringContent(JsonConvert.SerializeObject(messageDTO), Encoding.UTF8, "application/json");
 
@@ -120,6 +119,26 @@ public class DotnetBaseBackendTest
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.IsNotNull(Errors);
         Assert.AreEqual(ErrorCodeExpected, Errors.First().Code);
+    }
+
+    [TestMethod]
+    public async Task UpdateMessage_ReturnErrorIdInvalid()
+    {
+        // Arrange
+        string message = "Hello";
+        var messageDTO = new MessageDto(0, message);
+        var content = new StringContent(JsonConvert.SerializeObject(messageDTO), Encoding.UTF8, "application/json");
+
+        // Act
+        var response = await _client.PutAsync("/api/v1/base", content);
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var Errors = JsonConvert.DeserializeObject<List<Error>>(responseString);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.IsNotNull(Errors);
+        Assert.AreEqual(ErrorCode.INVALID, Errors.First().Code);
     }
 
 }

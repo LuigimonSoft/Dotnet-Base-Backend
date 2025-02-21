@@ -126,4 +126,16 @@
   <data name="1003" xml:space="preserve">
     <value>Message maximun 100 </value>
   </data>
+  <data name="4001" xml:space="preserve">
+    <value>Erreur en la base de donnes</value>
+  </data>
+  <data name="5001" xml:space="preserve">
+    <value>Internal erreur</value>
+  </data>
+  <data name="1004" xml:space="preserve">
+    <value>Le message n'exist pas</value>
+  </data>
+  <data name="1005" xml:space="preserve">
+    <value>id Invalide</value>
+  </data>
 </root>

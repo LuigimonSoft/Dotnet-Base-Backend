@@ -80,6 +80,10 @@ namespace Dotnet_Base_Backend.Repositories
                 await _context.SaveChangesAsync();
                 return true;
             }
+            catch(RepositoryException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 throw new RepositoryException(ErrorCode.DATABASE_ERROR, ex);
@@ -97,6 +101,10 @@ namespace Dotnet_Base_Backend.Repositories
                 _context.Messages.Remove(message);
                 await _context.SaveChangesAsync();
                 return true;
+            }
+            catch (RepositoryException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

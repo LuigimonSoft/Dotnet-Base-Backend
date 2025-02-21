@@ -24,35 +24,38 @@ public class DotnetBaseBackendTest
     }
 
     [TestMethod]
-    public async Task GetMessages_ReturnSuccess()
+    public async Task GetMessages_ShouldReturnSuccess()
     {
-        string messageExpected = "Hello World";
+        await AddMessage_ReturnSuccess();
+        string messageExpected = "Hello World2";
         // Arrange
         var response = await _client.GetAsync("/api/v1/base");
 
         // Act
         var responseString = await response.Content.ReadAsStringAsync();
-        var messages = JsonConvert.DeserializeObject<List<MessageDTO>>(responseString);
+        var messages = JsonConvert.DeserializeObject<List<MessageDto>>(responseString);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         Assert.IsNotNull(messages);
-        Assert.AreEqual(messageExpected, messages.First().Message);
+        Assert.AreEqual(messageExpected, messages[0].Message);
     }
 
+
     [TestMethod]
-    public async Task SetMessage_ReturnSuccess()
+    public async Task AddMessage_ReturnSuccess()
     {
         // Arrange
         string messageExpected = "Hello World2";
-        var message = new MessageDTO { Message = messageExpected };
+        int idExpected = 1;
+        var message = new MessageDto(idExpected, messageExpected);
         var content = new StringContent(JsonConvert.SerializeObject(message), Encoding.UTF8, "application/json");
 
         // Act
         var response = await _client.PostAsync("/api/v1/base", content);
 
         var responseString = await response.Content.ReadAsStringAsync();
-        var messages = JsonConvert.DeserializeObject<MessageDTO>(responseString);
+        var messages = JsonConvert.DeserializeObject<MessageDto>(responseString);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -66,7 +69,8 @@ public class DotnetBaseBackendTest
     public async Task SetMessage_ReturnBadRequest(string message, ErrorCode ErrorCodeExpected)
     {
         // Arrange
-        var messageDTO = new MessageDTO { Message = message };
+        int idExpected = 1;
+        var messageDTO = new MessageDto(idExpected, message);
         var content = new StringContent(JsonConvert.SerializeObject(messageDTO), Encoding.UTF8, "application/json");
 
         // Act
@@ -78,7 +82,7 @@ public class DotnetBaseBackendTest
         // Assert
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.IsNotNull(Errors);
-        Assert.AreEqual(ErrorCodeExpected, Errors.First().Code);
+        Assert.AreEqual(ErrorCodeExpected, Errors[0].Code);
     }
 
     [TestMethod]
@@ -86,13 +90,13 @@ public class DotnetBaseBackendTest
     {
         // Arrange
         string message = "Hello";
-        string messageExpected = "Hello World";
-        
+        string messageExpected = "Hello World2";
+        await AddMessage_ReturnSuccess();
         // Act
-        var response = await _client.GetAsync($"/api/v1/base/{message}");
+        var response = await _client.GetAsync($"/api/v1/base/search/{message}");
 
         var responseString = await response.Content.ReadAsStringAsync();
-        var messages = JsonConvert.DeserializeObject<List<MessageDTO>>(responseString);
+        var messages = JsonConvert.DeserializeObject<List<MessageDto>>(responseString);
 
         // Assert
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -107,7 +111,7 @@ public class DotnetBaseBackendTest
         // Arrange
 
         // Act
-        var response = await _client.GetAsync($"/api/v1/base/{message}");
+        var response = await _client.GetAsync($"/api/v1/base/search/{message}");
 
         var responseString = await response.Content.ReadAsStringAsync();
         var Errors = JsonConvert.DeserializeObject<List<Error>>(responseString);

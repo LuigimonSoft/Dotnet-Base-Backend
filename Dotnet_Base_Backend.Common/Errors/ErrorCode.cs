@@ -11,6 +11,7 @@ namespace Dotnet_Base_Backend.Common.Errors
         REQUIRED = 1001,
         EMPTY = 1002,
         MAX_LENGTH = 1003,
+        NOT_FOUND = 1004,
         INVALID_JSON_FORMAT = 1013,
         UNEXPECTED_JSON_FORMAT = 1014,
         DATABASE_ERROR = 4001,

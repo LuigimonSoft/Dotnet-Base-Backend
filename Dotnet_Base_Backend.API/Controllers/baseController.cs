@@ -20,7 +20,7 @@ namespace Dotnet_Base_Backend.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<MessageDTO>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<MessageDto>),StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMessage()
         {
@@ -28,30 +28,75 @@ namespace Dotnet_Base_Backend.API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(List<MessageDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> SetMessage(MessageDTO message)
+        public async Task<IActionResult> AddMessage([FromBody] MessageDto messageDto)
         {
             MessageDTOValidator validator = new MessageDTOValidator();
-            validator.ValidateAndThrow(message);
+            await validator.ValidateAndThrowAsync(messageDto);
 
-            var res = await _baseService.SetMessage(message.Message);
+            var res = await _baseService.AddMessage(messageDto.Message);
             
             return StatusCode(StatusCodes.Status200OK, res);
         }
 
-        [HttpGet("{message}")]
-        [ProducesResponseType(typeof(List<MessageDTO>), StatusCodes.Status200OK)]
+        [HttpGet("search/{message}")]
+        [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SearchMessage(string message)
         {
-            MessageDTO messageDTO = new MessageDTO { Message = message };
-            MessageDTOValidator validator = new MessageDTOValidator();
-            validator.ValidateAndThrow(messageDTO);
+            MessageDto messageDto = new(0, message);
 
-            var res = await _baseService.SearchMessage(messageDTO.Message);
+            MessageDTOValidator validator = new MessageDTOValidator();
+            await validator.ValidateAndThrowAsync(messageDto);
+
+            var res = await _baseService.SearchMessage(message);
+
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SearchById(int id)
+        {
+            var res = await _baseService.GetMessageById(id);
+
+            if(res is null)
+                return NotFound();
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpPut()]
+        [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateMessage(MessageDto message)
+        {
+            MessageDTOValidator validator = new MessageDTOValidator();
+            await validator.ValidateAndThrowAsync(message);
+
+            if(message.Id <=0)
+                return BadRequest();
+
+            var res = await _baseService.UpdateMessage(message);
+
+            return StatusCode(StatusCodes.Status200OK, res);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(List<MessageDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteMessage(int id)
+        {
+            var res = await _baseService.DeleteMessage(id);
 
             return StatusCode(StatusCodes.Status200OK, res);
         }

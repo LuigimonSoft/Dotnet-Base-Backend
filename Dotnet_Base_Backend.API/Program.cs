@@ -3,6 +3,8 @@ using Dotnet_Base_Backend.Repositories;
 using Dotnet_Base_Backend.Repositories.Interfaces;
 using Dotnet_Base_Backend.Services.Interfaces;
 using Dotnet_Base_Backend.Services;
+using Dotnet_Base_Backend.Repositories.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dotnet_Base_Backend.API
 {
@@ -19,8 +21,11 @@ namespace Dotnet_Base_Backend.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
-            builder.Services.AddSingleton<IBaseRepository, BaseRepository>();
+            builder.Services.AddDbContext<MessagesDbContext>(options =>
+            {
+                options.UseInMemoryDatabase("Messages");
+            });
+            builder.Services.AddTransient<IBaseRepository, BaseRepository>();
             builder.Services.AddTransient<IBaseService, BaseService>();
 
             var app = builder.Build();

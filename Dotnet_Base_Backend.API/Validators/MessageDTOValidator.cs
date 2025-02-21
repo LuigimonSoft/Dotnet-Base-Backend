@@ -5,7 +5,7 @@ using FluentValidation.Validators;
 
 namespace Dotnet_Base_Backend.API.Validators
 {
-    public class MessageDTOValidator: AbstractValidator<MessageDTO>
+    public class MessageDTOValidator: AbstractValidator<MessageDto>
     {
         public MessageDTOValidator()
         {

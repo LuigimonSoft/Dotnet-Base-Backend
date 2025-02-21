@@ -3,11 +3,6 @@ using Dotnet_Base_Backend.DTO;
 using Dotnet_Base_Backend.Models;
 using Dotnet_Base_Backend.Repositories.Interfaces;
 using Dotnet_Base_Backend.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Dotnet_Base_Backend.Services
 {
@@ -20,13 +15,13 @@ namespace Dotnet_Base_Backend.Services
             _baseRepository = baseRepository;
         }
 
-        public async Task<List<MessageDTO>> GetMessage()
+        public async Task<List<MessageDto>> GetMessage()
         {
             try
             {
-                List<MessageDTO> result = new List<MessageDTO>();
+                List<MessageDto> result = new List<MessageDto>();
                 var messages = await _baseRepository.GetMessage();
-                messages.ForEach(message => result.Add(new MessageDTO() { Message = message }));
+                messages.ForEach(message => result.Add(new MessageDto(message.Id,message.Content)));
                 return result;
             }
             catch (Exception ex)
@@ -35,15 +30,15 @@ namespace Dotnet_Base_Backend.Services
             }
         }
 
-        public async Task<MessageDTO> SetMessage(string message)
+        public async Task<MessageDto?> AddMessage(string message)
         {
             try
             {
-               MessageDTO result = new MessageDTO();
-               var messages = await _baseRepository.SetMessage(message);
-                if(messages.Count > 0)
-                    result.Message = messages[0];
-                return result;
+               var messages = await _baseRepository.AddMessage(message);
+               if(messages != null)
+                 return new MessageDto(messages.Id, messages.Content);
+               else
+                    return null;
             }
             catch (Exception ex)
             {
@@ -51,14 +46,52 @@ namespace Dotnet_Base_Backend.Services
             }
         }
 
-        public async Task<List<MessageDTO>> SearchMessage(string message)
+        public async Task<List<MessageDto>> SearchMessage(string message)
         {
             try
             {
-                List<MessageDTO> result = new List<MessageDTO>();
                 var messages = await _baseRepository.SearchMessage(message);
-                messages.ForEach(message => result.Add(new MessageDTO() { Message = message }));
-                return result;
+                return messages.Select(message => { return new MessageDto(message.Id, message.Content); }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ServicesException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+            }
+        }
+
+        public async Task<MessageDto?> GetMessageById(int id)
+        {
+            try
+            {
+                var message = await _baseRepository.GetMessageById(id);
+                if (message != null)
+                    return new MessageDto(message.Id, message.Content);
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ServicesException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+            }
+        }
+
+        public async Task<bool> UpdateMessage(MessageDto message)
+        {
+            try
+            {
+                return await _baseRepository.UpdateMessage(new Message() { Id = message.Id, Content = message.Message });
+            }
+            catch (Exception ex)
+            {
+                throw new ServicesException(ErrorCode.INTERNAL_SERVER_ERROR, ex);
+            }
+        }
+
+        public async Task<bool> DeleteMessage(int id)
+        {
+            try
+            {
+                return await _baseRepository.DeleteMessage(id);
             }
             catch (Exception ex)
             {

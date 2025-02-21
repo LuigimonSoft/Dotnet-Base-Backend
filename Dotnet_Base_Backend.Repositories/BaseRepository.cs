@@ -61,7 +61,7 @@ namespace Dotnet_Base_Backend.Repositories
         {
             try
             {
-                return await _context.Messages.Where(x => x.Content.Contains(message)).ToListAsync();
+                return await _context.Messages.Where(x => x.Content.Contains(message, StringComparison.InvariantCultureIgnoreCase)).ToListAsync();
             }
             catch (Exception ex)
             {

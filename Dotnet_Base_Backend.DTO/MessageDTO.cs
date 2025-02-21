@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Dotnet_Base_Backend.DTO
 {
-    public class MessageDTO
-    {
-        public string Message { get; set; }
-    }
+    public record MessageDto(int Id, string Message);
+
 }

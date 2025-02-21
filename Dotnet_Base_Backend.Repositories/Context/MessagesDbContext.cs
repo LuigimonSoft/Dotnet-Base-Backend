@@ -10,7 +10,8 @@ namespace Dotnet_Base_Backend.Repositories.Context
 {
     public class MessagesDbContext : DbContext
     {
-        public DbSet<Message> Messages { get; set; }
+        public MessagesDbContext() { }
+        public virtual DbSet<Message> Messages { get; set; }
 
         public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options) { }
 

@@ -34,11 +34,9 @@ namespace Dotnet_Base_Backend.Services
         {
             try
             {
-               var messages = await _baseRepository.AddMessage(message);
-               if(messages != null)
-                 return new MessageDto(messages.Id, messages.Content);
-               else
-                    return null;
+                var messages = await _baseRepository.AddMessage(message);
+
+                return new MessageDto(messages.Id, messages.Content);
             }
             catch (Exception ex)
             {

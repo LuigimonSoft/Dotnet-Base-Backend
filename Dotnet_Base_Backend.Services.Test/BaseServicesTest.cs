@@ -180,7 +180,20 @@ namespace Dotnet_Base_Backend.Services.Test
             Assert.AreEqual(messageExpected, result.Message);
         }
 
-        
+        [TestMethod]
+        public async Task GetMessageById_ShouldReturnNull()
+        {
+            // Arrange
+            int idExpected = 1;
+            _baseRepositoryMock.Setup(x => x.GetMessageById(idExpected)).ReturnsAsync((Message)null!);
+
+            // Act
+            var result = await _baseService.GetMessageById(idExpected);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
         [TestMethod]
         public async Task GetMessageById_ShouldThrowException()
         {

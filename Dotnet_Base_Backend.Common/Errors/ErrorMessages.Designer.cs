@@ -88,6 +88,24 @@ namespace Dotnet_Base_Backend.Common.Errors {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Message not found.
+        /// </summary>
+        internal static string _1004 {
+            get {
+                return ResourceManager.GetString("1004", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Id invalid.
+        /// </summary>
+        internal static string _1005 {
+            get {
+                return ResourceManager.GetString("1005", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Database error.
         /// </summary>
         internal static string _4001 {

@@ -126,4 +126,16 @@
   <data name="1003" xml:space="preserve">
     <value>Mensaje tiene un maximo de 100 caracteres</value>
   </data>
+  <data name="4001" xml:space="preserve">
+    <value>Error en la base de datos</value>
+  </data>
+  <data name="5001" xml:space="preserve">
+    <value>Error interno</value>
+  </data>
+  <data name="1004" xml:space="preserve">
+    <value>Mensaje no encontrado</value>
+  </data>
+  <data name="1005" xml:space="preserve">
+    <value>Id invalido</value>
+  </data>
 </root>

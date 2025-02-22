@@ -78,11 +78,8 @@ namespace Dotnet_Base_Backend.API.Controllers
         [ProducesResponseType(typeof(IList<Error>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateMessage(MessageDto message)
         {
-            MessageDTOValidator validator = new MessageDTOValidator();
+            MessageDTOValidator validator = new MessageDTOValidator(true);
             await validator.ValidateAndThrowAsync(message);
-
-            if(message.Id <=0)
-                return BadRequest();
 
             var res = await _baseService.UpdateMessage(message);
 

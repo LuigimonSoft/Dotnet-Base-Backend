@@ -11,9 +11,8 @@ namespace Dotnet_Base_Backend.Repositories.Context
     public class MessagesDbContext : DbContext
     {
         public MessagesDbContext() { }
-        public virtual DbSet<Message> Messages { get; set; }
-
         public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options) { }
+        public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

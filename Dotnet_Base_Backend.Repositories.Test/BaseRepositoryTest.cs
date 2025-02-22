@@ -16,11 +16,11 @@ namespace Dotnet_Base_Backend.Repositories.Test
     [TestClass]
     public class BaseRepositoryTest
     {
-        private BaseRepository _baseRepository;
-        private BaseRepository _baseRepositoryErrors;
+        private BaseRepository? _baseRepository;
+        private BaseRepository? _baseRepositoryErrors;
         private MessagesDbContext? _messagesDbContext;
-        private Mock<MessagesDbContext> _messagesErrorsDbContextMock;
-        private Mock<DbSet<Message>> _messagesMock;
+        private Mock<MessagesDbContext>? _messagesErrorsDbContextMock;
+        private Mock<DbSet<Message>>? _messagesMock;
 
         [TestInitialize]
         public void TestInitialize()
@@ -60,11 +60,11 @@ namespace Dotnet_Base_Backend.Repositories.Test
             await AddMessagesDataBase();
 
             // Act
-            var result = await _baseRepository.GetMessage();
+            var result = await _baseRepository!.GetMessage();
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.Count>0);
             Assert.AreEqual(messageExpected, result[0]?.Content);
             Assert.AreEqual(messageIdExpected, result[0]?.Id);
         }
@@ -73,14 +73,14 @@ namespace Dotnet_Base_Backend.Repositories.Test
         public async Task GetMessage_ShouldReturnRepositoryException()
         {
             ErrorCode errorCodeException = ErrorCode.DATABASE_ERROR;
-            _messagesMock.As<IQueryable<Message>>()
+            _messagesMock!.As<IQueryable<Message>>()
                 .Setup(m => m.Provider)
                 .Throws(new Exception("Error to connect to data base"));
-            _messagesErrorsDbContextMock.Setup(x => x.Add(It.IsAny<Message>())).Throws(new Exception("Error to add messages"));
+            _messagesErrorsDbContextMock!.Setup(x => x.Add(It.IsAny<Message>())).Throws(new Exception("Error to add messages"));
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.GetMessage();
+                return _baseRepositoryErrors!.GetMessage();
             });
 
             Assert.IsNotNull(res);
@@ -94,7 +94,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
             string messageExpected = "Hello World2";
 
             // Act
-            var result = await _baseRepository.AddMessage(messageExpected);
+            var result = await _baseRepository!.AddMessage(messageExpected);
 
             // Assert
             Assert.IsNotNull(result);
@@ -109,7 +109,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.AddMessage("test message");
+                return _baseRepositoryErrors!.AddMessage("test message");
             });
 
             Assert.IsNotNull(res);
@@ -124,11 +124,11 @@ namespace Dotnet_Base_Backend.Repositories.Test
             await AddMessagesDataBase();
 
             // Act
-            var result = await _baseRepository.SearchMessage("Hello");
+            var result = await _baseRepository!.SearchMessage("Hello");
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Any());
+            Assert.IsTrue(result.Count>0);
             Assert.AreEqual(messageExpected, result[0].Content);
         }
 
@@ -139,7 +139,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.SearchMessage("test");
+                return _baseRepositoryErrors!.SearchMessage("test");
             });
 
             Assert.IsNotNull(res);
@@ -155,7 +155,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
             await AddMessagesDataBase();
 
             // Act
-            var result = await _baseRepository.GetMessageById(messageIdExpected);
+            var result = await _baseRepository!.GetMessageById(messageIdExpected);
 
             // Assert
             Assert.IsNotNull(result);
@@ -170,7 +170,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.GetMessageById(2);
+                return _baseRepositoryErrors!.GetMessageById(2);
             });
 
             Assert.IsNotNull(res);
@@ -187,11 +187,11 @@ namespace Dotnet_Base_Backend.Repositories.Test
             actualMessage.Content = messageExpected;
 
             // Act
-            var result = await _baseRepository.UpdateMessage(actualMessage);
+            var result = await _baseRepository!.UpdateMessage(actualMessage);
 
             // Assert
             Assert.IsTrue(result);
-            var messageRes = (_messagesDbContext?.Messages.FindAsync(actualMessage.Id).Result) ?? throw new Exception("Message not found");
+            var messageRes = (await _messagesDbContext!.Messages.FindAsync(actualMessage.Id)) ?? throw new Exception("Message not found");
             Assert.AreEqual(messageExpected, messageRes.Content);
         }
 
@@ -199,11 +199,11 @@ namespace Dotnet_Base_Backend.Repositories.Test
         public async Task UpdateMessage_ShouldReturnRepositoryException()
         {
             ErrorCode errorCodeException = ErrorCode.DATABASE_ERROR;
-            _messagesErrorsDbContextMock.Setup(x => x.Update(It.IsAny<Message>())).Throws(new Exception("Error to update messages"));
+            _messagesErrorsDbContextMock!.Setup(x => x.Update(It.IsAny<Message>())).Throws(new Exception("Error to update messages"));
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.UpdateMessage(new Message() { Id = 1 , Content= "Hello"});
+                return _baseRepositoryErrors!.UpdateMessage(new Message() { Id = 1 , Content= "Hello"});
             });
 
             Assert.IsNotNull(res);
@@ -219,7 +219,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepository.UpdateMessage(new Message() { Id = 2, Content = "Hello" });
+                return _baseRepository!.UpdateMessage(new Message() { Id = 2, Content = "Hello" });
             });
 
             Assert.IsNotNull(res);
@@ -232,25 +232,25 @@ namespace Dotnet_Base_Backend.Repositories.Test
             // Arrange
             int messageIdExpected = 1;
             await AddMessagesDataBase();
-            var totalMessages = _messagesDbContext?.Messages.Count();
+            var totalMessages = await _messagesDbContext!.Messages.CountAsync();
             // Act
-            var result = await _baseRepository.DeleteMessage(messageIdExpected);
+            var result = await _baseRepository!.DeleteMessage(messageIdExpected);
 
             // Assert
             Assert.IsTrue(result);
-            Assert.AreEqual(totalMessages - 1, _messagesDbContext?.Messages.Count());
-            Assert.IsNull(_messagesDbContext?.Messages.FindAsync(messageIdExpected).Result);
+            Assert.AreEqual(totalMessages - 1, await _messagesDbContext!.Messages.CountAsync());
+            Assert.IsNull(await _messagesDbContext!.Messages.FindAsync(messageIdExpected));
         }
 
         [TestMethod]
         public async Task DeleteMessage_ShouldReturnRepositoryException()
         {
             ErrorCode errorCodeException = ErrorCode.DATABASE_ERROR;
-            _messagesErrorsDbContextMock.Setup(x => x.Remove(It.IsAny<Message>())).Throws(new Exception("Error to remove messages"));
+            _messagesErrorsDbContextMock!.Setup(x => x.Remove(It.IsAny<Message>())).Throws(new Exception("Error to remove messages"));
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepositoryErrors.DeleteMessage(2);
+                return _baseRepositoryErrors!.DeleteMessage(2);
             });
 
             Assert.IsNotNull(res);
@@ -265,7 +265,7 @@ namespace Dotnet_Base_Backend.Repositories.Test
 
             var res = await Assert.ThrowsExceptionAsync<RepositoryException>(() =>
             {
-                return _baseRepository.DeleteMessage(2);
+                return _baseRepository!.DeleteMessage(2);
             });
 
             Assert.IsNotNull(res);
